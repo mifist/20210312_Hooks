@@ -1,0 +1,15 @@
+.total-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  height: 100%;
+}
+
+.custom-tilt {
+  background: #00bf8f;
+  background: -webkit-linear-gradient(135deg, #00bf8f, #001510);
+  background: linear-gradient(135deg, #00bf8f, #001510);
+  height: 150px;
+  width: 200px;
+}

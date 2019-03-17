@@ -1,0 +1,42 @@
+.total-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  height: 100%;
+}
+
+.custom-tilt {
+  background: #00bf8f;
+  background: -webkit-linear-gradient(135deg, #00bf8f, #001510);
+  background: linear-gradient(135deg, #00bf8f, #001510);
+  height: 150px;
+  width: 200px;
+}
+
+.search-results {
+  display: grid;
+  grid-template-columns: 180px auto;
+  grid-gap: 1rem;
+  margin-bottom: 1rem;
+}
+.search-results input {
+  align-self: center;
+}
+
+.nav-link {
+  text-transform: uppercase;
+}
+.nav-link:hover {
+  color: rgb(195, 21, 88);
+}
+
+.active {
+  color: rgb(195, 21, 88);
+}
+
+.grid {
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+}

@@ -1,0 +1,10 @@
+.nav-link {
+  text-transform: uppercase;
+}
+.nav-link:hover {
+  color: rgb(195, 21, 88);
+}
+
+.active {
+  color: rgb(195, 21, 88);
+}

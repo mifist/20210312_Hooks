@@ -14,7 +14,7 @@ const HeaderMemo = props => {
   const titleReversed = reverseWord(title)
 
   return (
-    <div className="col-md-5">
+    <>
       <h1>{titleReversed}</h1>
       <div className="form-group">
         <input
@@ -23,7 +23,7 @@ const HeaderMemo = props => {
           className="form-control"
         />
       </div>
-    </div>
+    </>
   )
 }
 

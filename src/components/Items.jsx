@@ -35,7 +35,7 @@ const Items = () => {
   const {handleChange, loading, items, inputRef} = useItems("films")
 
   return (
-    <div className="col-md-5">
+    <>
       <Header />
 
       <div className="form-group">
@@ -49,7 +49,7 @@ const Items = () => {
       ) : (
         <h1>Total: {items && items.length}</h1>
       )}
-    </div>
+    </>
   )
 }
 

@@ -1,13 +1,7 @@
-import {useState} from "react"
-
-// function initializeState(val) {}
+import useCounter from "../hooks/useCounter"
 
 const Counter2 = () => {
-  const [count, setCount] = useState(0)
-
-  const reset = () => setCount(0)
-  const increment = () => setCount(prev => prev + 1)
-  const decrement = () => setCount(prev => prev - 1)
+  const {count, reset, increment, decrement} = useCounter(10)
 
   return (
     <>

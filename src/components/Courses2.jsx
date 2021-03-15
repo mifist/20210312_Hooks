@@ -7,7 +7,7 @@ const Courses2 = ({ courseId }) => {
 
   useEffect(() => {
     getCourse(courseId).then((c) => setCourse(c));
-  }, []);
+  }, [courseId]);
 
   if (!course) {
     return null;

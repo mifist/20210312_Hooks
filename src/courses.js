@@ -1,7 +1,7 @@
 import frontend from "./img/frontend.jpg";
 import react from "./img/react.png";
 import php from "./img/php.jpg";
-import wp from "./img/wp.png";
+
 
 const courses = [
   {

@@ -1,21 +1,22 @@
-import {useState, useEffect} from "react"
+import {useState, useEffect, useCallback} from "react"
 import Form from "./Form"
 
 const SearchResults = () => {
   const [results, setResults] = useState([])
+  const [query, setQuery] = useState('films')
 
-  async function fetchData() {
-    const res = await fetch("https://swapi.dev/api/films")
+  const fetchData = useCallback( async ()  => {
+    const res = await fetch("https://swapi.dev/api/" + query)
     const {results} = await res.json()
     setResults(results)
-  }
+  }, [query])
 
   useEffect(() => {
     fetchData()
-  }, []) // Нормально ли это?
+  }, [fetchData]) // Нормально ли это?
 
   const handleSubmit = value => {
-    console.log(value)
+    setQuery(value)
   }
 
   return (

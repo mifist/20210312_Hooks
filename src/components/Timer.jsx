@@ -1,11 +1,22 @@
-import {useState, useRef} from "react"
+import {useState, useRef, useReducer} from "react"
 import { useEffect } from "react/cjs/react.development"
 
 // lapse, running, clear
+/* function reducer(state, action) {
+  switch(action.type){
+    case 'lapse': return {...state, lapse: action.now - action.startTime}
+    case 'running': return {...state, running: !state.running}
+    case 'clear': return {...state, running: false, lapse: 0}
+    default: throw Error('no cases')
+  }
+} */
+
+const reducer = (s, a) => ({...s, ...a})
+
+const initState=  {lapse: 0, running: false}
 
 const Timer = () => {
-  const [lapse, setLapse] = useState(0)
-  const [running, setRunning] = useState(false)
+  const [{lapse, running}, dispatch] =useReducer(reducer, initState)
   const intervalRef = useRef();
 
   useEffect(() => {
@@ -18,15 +29,15 @@ const Timer = () => {
       clearInterval(intervalRef.current)
     } else {
       const startTime = Date.now() - lapse
-      intervalRef.current = setInterval(() => setLapse(Date.now() - startTime), 0)
+      intervalRef.current = setInterval(() => dispatch({lapse:  Date.now() - startTime}), 0)
     }
-    setRunning(!running)
+    dispatch({running: !running})
   }
 
   const handleClear = () => {
     clearInterval(intervalRef.current)
-    setRunning(false)
-    setLapse(0)
+    dispatch({running: false , lapse: 0})
+
   }
 
   return (

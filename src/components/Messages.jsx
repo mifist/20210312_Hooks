@@ -1,20 +1,21 @@
-import {Component} from "react"
+import {useState, useEffect} from "react"
 import PrintScrollToBottom from "./PrintScrollToBottom"
 import {subscribeToMessages, getInitData} from "../data"
 
-class Messages extends Component {
-  state = {
-    messages: getInitData(),
-  }
-
-  componentDidMount() {
-    subscribeToMessages(message => {
-      this.setState({messages: this.state.messages.concat([message])})
+const  Messages  = () =>  {
+  const [messages, setMessages] = useState(getInitData)
+ 
+  useEffect(() => {
+    const fn = subscribeToMessages(message => {
+      setMessages(x => [...x, message])
     })
-  }
+    return () => fn()
+  }, [])
 
-  render() {
-    const {messages} = this.state
+  useEffect(()=> {
+    document.title =  messages.length
+  })
+
     return (
       <div className="container pt-5">
         <PrintScrollToBottom>
@@ -33,6 +34,6 @@ class Messages extends Component {
       </div>
     )
   }
-}
+
 
 export default Messages

@@ -1,4 +1,5 @@
 import {useState, useEffect} from "react"
+import useDebounce from '../hooks/useDebounce'
 
 // https://pokeapi.co/api/v2/pokemon/${pokemonName}
 
@@ -6,12 +7,14 @@ const Debouncing = () => {
   const [pokemon, setPokemon] = useState(null)
   const [pokemonName, setPokemonName] = useState("")
 
+  const debounceVal = useDebounce(pokemonName)
+
   useEffect(() => {
-    if (!pokemonName) return
-    fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
+    if (!debounceVal) return
+    fetch(`https://pokeapi.co/api/v2/pokemon/${debounceVal}`)
       .then(r => r.json())
       .then(pokemon => setPokemon(pokemon))
-  }, [pokemonName])
+  }, [debounceVal])
 
   const handleChange = ({target}) => setPokemonName(target.value)
 

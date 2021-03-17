@@ -1,7 +1,15 @@
-import {useState} from "react"
+import {useState, useEffect} from "react"
+
 
 const Form = ({title: parentTitle, onSubmit}) => {
   const [title, setTitle] = useState(parentTitle || "")
+
+  useEffect(() => {
+    if(parentTitle === '') {
+      setTitle('')
+    }
+  }, [parentTitle])
+
 
   const handleSubmit = e => {
     e.preventDefault()

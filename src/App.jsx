@@ -1,50 +1,31 @@
-import {useState, useReducer, useEffect} from "react"
+import {useState, useCallback, useEffect} from "react"
 import "./App.css"
 import Form from "./components/Form"
-import ItemFallback from './components/ItemsFallbak'
-import ItemsError from './components/ItemsError'
-import Items from './components/Items'
-
-import {queryApi} from './api'
-
-const initState = {
-  data: null,
-  status: "idle",
-  error: null,
-}
-
-function reducer(state, action) {
-  switch (action.type) {
-    case "pending": return{data:null, error:null, status: 'pending'}
-    case "resolved": return{data:action.data, error:null, status: 'resolved'}
-    case "rejected": return{data:null, error:action.error, status: 'rejected'}
-    default:
-      throw Error("this case impossible")
-  }
-}
+import ItemFallback from "./components/ItemsFallbak"
+import ItemsError from "./components/ItemsError"
+import Items from "./components/Items"
+import {ErrorBoundary} from "react-error-boundary"
+import useAsync from "./hooks/useAsync"
+import {queryApi} from "./api"
 
 const ItemsView = ({title}) => {
-  const [{data, status, error}, dispatch] = useReducer(reducer, initState)
-
+  const {data, status, error, run} = useAsync({
+    status: title ? "pending" : "idle",
+  })
   useEffect(() => {
-    if(!title) return;
-    dispatch({type: 'pending'})
-    queryApi(title).then(
-      data => dispatch({type: 'resolved', data}),
-      error => dispatch({type: 'rejected', error}),
-    )
-  }, [title])
+    if (!title) return
+    return run(queryApi(title))
+  }, [run, title])
 
-  if(status === 'idle') {
+  if (status === "idle") {
     return "Choose item"
-  } else if(status === 'pending') {
-     return <ItemFallback />
-  } else if(status === 'rejected') {
-    return <ItemsError  error={error}/>
-  } else if(status === 'resolved'){
-    return <Items data={data}/>
+  } else if (status === "pending") {
+    return <ItemFallback />
+  } else if (status === "rejected") {
+    throw Error
+  } else if (status === "resolved") {
+    return <Items data={data} />
   }
- 
 }
 
 function App() {
@@ -53,12 +34,19 @@ function App() {
   const handleSubmit = title => {
     setTitle(title)
   }
+  const onReset = () => setTitle("")
 
   return (
     <div className="items-wrap">
       <Form title={title} onSubmit={handleSubmit} />
       <div className="items-view">
-        <ItemsView title={title} />
+        <ErrorBoundary
+          resetKeys={[title]}
+          onReset={onReset}
+          FallbackComponent={ItemsError}
+        >
+          <ItemsView title={title} />
+        </ErrorBoundary>
       </div>
     </div>
   )

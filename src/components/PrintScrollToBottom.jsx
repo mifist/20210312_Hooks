@@ -1,20 +1,28 @@
-import {lifecycle} from "recompose"
+import {useState, useLayoutEffect, useEffect} from "react"
 
 const scroll = () => window.scrollTo(0, document.documentElement.scrollHeight)
 
-const PrintScrollToBottom = ({children}) => children
+const PrintScrollToBottom = ({children}) => {
+   const [isScrolled, setIsScrolled] = useState(false)
 
-const enhance = lifecycle({
-  componentDidMount() {
-    scroll()
-  },
-  getSnapshotBeforeUpdate() {
-    const {clientHeight, scrollTop, scrollHeight} = document.documentElement
-    return clientHeight + scrollTop < scrollHeight
-  },
-  componentDidUpdate(prevProps, prevState, isScrolledUp) {
-    if (!isScrolledUp) scroll()
-  },
-})
+  useEffect(() => {
+    scroll();
+    function onScroll(){
+      const {clientHeight, scrollHeight} = document.documentElement
+      setIsScrolled(clientHeight + window.pageYOffset < scrollHeight)
+      window.addEventListener('scroll', onScroll) 
+     }
+     return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
-export default enhance(PrintScrollToBottom)
+
+  useLayoutEffect(() => {
+    if (!isScrolled) {
+      scroll()
+    }
+  })
+
+  return children
+}
+
+export default PrintScrollToBottom;

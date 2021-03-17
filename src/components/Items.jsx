@@ -1,11 +1,16 @@
-import {useState, useEffect} from "react"
+import {useState, useEffect, useRef} from "react"
 
 function useItems(initialValue) {
   const [inputValue, setInputValue] = useState(initialValue)
   const [loading, setLoading] = useState(false)
   const [items, setItems] = useState([])
 
-  const handleChange = e => setInputValue(e.target.value)
+  const nameRef = useRef();
+
+  const handleChange = e => {
+    setInputValue(nameRef.current.value)
+    nameRef.current.value = '';
+  }
 
   useEffect(() => {
     if (inputValue) {
@@ -22,7 +27,7 @@ function useItems(initialValue) {
   }, [inputValue])
 
   return {
-    inputValue,
+    nameRef,
     handleChange,
     loading,
     items,
@@ -30,14 +35,14 @@ function useItems(initialValue) {
 }
 
 const Items = () => {
-  const {inputValue, onChange, loading, items} = useItems("films")
+  const {nameRef, handleChange, loading, items} = useItems("films")
 
   return (
     <div className="col-md-4">
       <div className="form-group">
         <label>Enter item</label>
-        <input type="text" className="form-control" />
-        <button type="button" className="btn btn-primary mt-3">
+        <input  ref={nameRef}   type="text" className="form-control" />
+        <button onClick={handleChange}  type="button" className="btn btn-primary mt-3">
           Send request
         </button>
       </div>

@@ -1,5 +1,5 @@
 import {useState, useEffect, useReducer} from "react"
-import axios from "axios"
+import axios, {CancelToken} from "axios"
 
 // https://pokeapi.co/api/v2/pokemon/${pokemonName}
 
@@ -34,13 +34,23 @@ const Pokemon1 = () => {
     if (!pokemonName) {
       return
     }
-
-    axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
-        .then(res => res.data)
+    const source = CancelToken.source();
+    
+    new Promise(resolve => setTimeout(resolve, 1000)).then(
+      () => axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`, {
+          cancelToken: source.token
+      }) 
+    )   
+     .then(res => res.data)
         .then(
           data => dispatch({type: "resolved", data}),
           error => dispatch({type: "rejected", error}),
-        )
+        );
+        
+         return () => {
+           source.cancel('Query cancelled')
+         } 
+
   }, [pokemonName])
 
   const handleChange = ({target}) => setPokemonName(target.value)

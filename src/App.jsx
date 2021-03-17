@@ -1,6 +1,9 @@
-import {useState} from "react"
-import Tilt from "./components/Tilt"
+import {lazy, Suspense, useState} from "react"
 import "./style.css"
+
+const loadTitl = () => import('./components/Tilt');
+const Tilt = lazy(loadTitl)
+
 
 function useToggle() {
   const [on, setOn] = useState(false)
@@ -12,9 +15,10 @@ const App = props => {
   const {on, toggle} = useToggle()
 
   return (
+   
     <div className="container pt-3">
       <div className="form-group">
-        <label htmlFor="toggle-element">
+        <label  htmlFor="toggle-element">
           <input
             type="checkbox"
             checked={on}
@@ -24,8 +28,9 @@ const App = props => {
           {on ? "Hide Tilt" : "Show Tilt"}
         </label>
       </div>
-      {on ? <Tilt /> : null}
+      {on ?  <Suspense fallback={<h1>Loading...</h1>}><Tilt /></Suspense> : null}
     </div>
+    
   )
 }
 

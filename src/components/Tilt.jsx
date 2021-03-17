@@ -7,7 +7,8 @@ const Tilt = props => {
   const tiltRef = useRef()
 
   useEffect(() => {
-    VanillaTilt.init(tiltRef.current, {
+    const ref = tiltRef.current
+    VanillaTilt.init(ref, {
       speed: 400,
       max: 25,
       startX: -25,
@@ -16,7 +17,7 @@ const Tilt = props => {
       glare: true,
       "max-glare": 0.5,
     })
-    return () => tiltRef.current.vanillaTilt.destroy()
+    return () => ref.vanillaTilt.destroy()
   }, [])
 
   return <div ref={tiltRef} className="custom-tilt" />

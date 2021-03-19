@@ -9,21 +9,22 @@ import useAsync from "./hooks/useAsync"
 import {queryApi} from "./api"
 
 const ItemsView = ({title}) => {
-  const {data, status, error, run} = useAsync({
+  const {data,  isIdle, isLoading, isError, isSuccess,  error, run} = useAsync({
     status: title ? "pending" : "idle",
   })
+
   useEffect(() => {
     if (!title) return
     return run(queryApi(title))
   }, [run, title])
 
-  if (status === "idle") {
+  if (isIdle) {
     return "Choose item"
-  } else if (status === "pending") {
+  } else if (isLoading) {
     return <ItemFallback />
-  } else if (status === "rejected") {
-    throw Error
-  } else if (status === "resolved") {
+  } else if (isError) {
+    Promise.reject(error)
+  } else if (isSuccess) {
     return <Items data={data} />
   }
 }

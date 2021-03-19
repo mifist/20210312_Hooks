@@ -1,22 +1,29 @@
-import {useState, useCallback, useEffect} from "react"
+import {useState, useEffect} from "react"
 import "./App.css"
+import {useQuery} from 'react-query'
 import Form from "./components/Form"
 import ItemFallback from "./components/ItemsFallbak"
 import ItemsError from "./components/ItemsError"
 import Items from "./components/Items"
 import {ErrorBoundary} from "react-error-boundary"
-import useAsync from "./hooks/useAsync"
 import {queryApi} from "./api"
 
-const ItemsView = ({title}) => {
-  const {data,  isIdle, isLoading, isError, isSuccess,  error, run} = useAsync({
-    status: title ? "pending" : "idle",
-  })
 
-  useEffect(() => {
-    if (!title) return
-    return run(queryApi(title))
-  }, [run, title])
+
+
+
+const ItemsView = ({title}) => {
+  const {data,  isIdle, isLoading, isError, isSuccess,  error} = useQuery(
+      ['starwars', {title}], 
+      () => queryApi(title), 
+      {
+        enabled: !!title
+      }
+   )
+
+
+
+
 
   if (isIdle) {
     return "Choose item"
